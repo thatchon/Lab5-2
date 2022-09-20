@@ -38,6 +38,18 @@ public class MyView2 extends HorizontalLayout {
         VerticalLayout wordView = new VerticalLayout();
         VerticalLayout sentenceView = new VerticalLayout();
 
+        word.setWidth("550px");
+        addGoodWord.setWidth("550px");
+        addBadWord.setWidth("550px");
+        sentence.setWidth("550px");
+        goodWord.setWidth("550px");
+        badWord.setWidth("550px");
+        addSentence.setWidth("550px");
+        goodSentence.setWidth("550px");
+        badSentence.setWidth("550px");
+        showSentence.setWidth("550px");
+
+
         wordView.add(word, addGoodWord, addBadWord, goodWord, badWord);
         sentenceView.add(sentence, addSentence, goodSentence, badSentence, showSentence);
 
@@ -46,8 +58,9 @@ public class MyView2 extends HorizontalLayout {
         addGoodWord.addClickListener(event -> {
             String word_in = this.word.getValue();
             ArrayList out = WebClient.create().post()
-                    .uri("http://127.0.0.1:8080/addGood?word="+ word_in)
-                    .retrieve().bodyToMono(ArrayList.class).block();
+                    .uri("http://localhost:8080/addGood?word="+ word_in)
+                    .retrieve()
+                    .bodyToMono(ArrayList.class).block();
             goodWord.setItems(out);
             Notification noti = Notification.show("Good Word Add : " + word_in);
             noti.setPosition(Notification.Position.BOTTOM_START);
@@ -56,8 +69,9 @@ public class MyView2 extends HorizontalLayout {
         addBadWord.addClickListener(event -> {
             String word_in = this.word.getValue();
             ArrayList out = WebClient.create().post()
-                    .uri("http://127.0.0.1:8080/addBad?word="+ word_in)
-                    .retrieve().bodyToMono(ArrayList.class).block();
+                    .uri("http://localhost:8080/addBad?word="+ word_in)
+                    .retrieve()
+                    .bodyToMono(ArrayList.class).block();
             badWord.setItems(out);
             Notification noti = Notification.show("Bad Word Add : " + word_in);
             noti.setPosition(Notification.Position.BOTTOM_START);
@@ -66,15 +80,17 @@ public class MyView2 extends HorizontalLayout {
         addSentence.addClickListener(event -> {
             String sen_in = this.sentence.getValue();
             String out = WebClient.create().post()
-                    .uri("http://127.0.0.1:8080/proof?sentence="+ sen_in)
-                    .retrieve().bodyToMono(String.class).block();
+                    .uri("http://localhost:8080/proof?sentence="+ sen_in)
+                    .retrieve()
+                    .bodyToMono(String.class).block();
             Notification noti = Notification.show(out);
             noti.setPosition(Notification.Position.BOTTOM_START);
         });
 
         showSentence.addClickListener(event -> {
-            Sentence out = WebClient.create().get().uri("http://127.0.0.1:8080/getSentence")
-                    .retrieve().bodyToMono(Sentence.class).block();
+            Sentence out = WebClient.create().get().uri("http://localhost:8080/getSentence")
+                    .retrieve()
+                    .bodyToMono(Sentence.class).block();
             String list_good = String.join(", ", out.goodSentences);
             goodSentence.setValue(list_good);
             String list_bad = String.join(", ", out.badSentences);

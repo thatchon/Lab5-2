@@ -64,13 +64,13 @@ public class WordPublisher {
             }
         }
         if(found_good && found_bad){
-            rabbitTemplate.convertAndSend("Fanout", "", s);
-            return "Found Good AND Bad Word";
+            rabbitTemplate.convertAndSend("MyFanoutExchange", "", s);
+            return "Found Good & Bad Word";
         } else if (found_good) {
-            rabbitTemplate.convertAndSend("Direct", "good", s);
+            rabbitTemplate.convertAndSend("MyDirectExchange", "good", s);
             return "Found Good Word";
         } else if (found_bad){
-            rabbitTemplate.convertAndSend("Direct", "bad", s);
+            rabbitTemplate.convertAndSend("MyDirectExchange", "bad", s);
             return  "Found Bad Word";
         }
         return "Not Found";
@@ -78,7 +78,7 @@ public class WordPublisher {
     @RequestMapping(value = "/getSentence", method = RequestMethod.GET)
     public Sentence getSentence(){
         System.out.println("test sen");
-        Object sentence = rabbitTemplate.convertSendAndReceive("Direct", "sen", "test");
+        Object sentence = rabbitTemplate.convertSendAndReceive("MyDirectExchange", "sen", "test");
         return  ((Sentence) sentence);
     }
 
